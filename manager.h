@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <string>
+#include <QtDebug>
 
 namespace Ui {
 class manager;
@@ -19,6 +21,8 @@ public:
 
 private slots:
     void on_BookQuery_clicked();
+
+    void on_addOneBook_clicked();
 
 private:
     Ui::manager *ui;
