@@ -14,6 +14,7 @@ manager::~manager()
 }
 
 QString condition ;
+QString CARDID ;
 extern QSqlDatabase db ;
 
 void manager::on_BookQuery_clicked()//点击查询图书
@@ -259,5 +260,104 @@ void manager::on_AddBookFromFile_clicked() //点击批量入库按钮，从文�
         //文件读取结束
         QMessageBox::information(this,tr("Info"),tr("Add books from File finish!")) ;
     }
+}
+
+
+void manager::on_BorrowBook_clicked() //点击借书按钮
+{
+    QString BOOKID = ui->LineBookID->text() ;
+    //先查询有没有这本书，有的话啥事没有
+    QSqlQuery query(db) ;
+    QString sqlstr ;
+    sqlstr = "select * from book where bookid = '" ;
+    sqlstr += BOOKID ;
+    sqlstr += "';" ;
+    bool foundBook = true ;
+    if(query.exec(sqlstr))
+    {
+        qDebug()<<sqlstr ;
+        if(!query.first())
+        {
+            foundBook = false ;
+            qDebug()<<"No Such Book";
+            QMessageBox::warning(this,tr("Borrow Fail!"),tr("No such Book!")) ;
+        }
+        else
+        {
+            foundBook = true ;
+        }
+    }
+    //有这本书:
+    //1. 如果该书还有库存，则借书成功，同时库存数减一。
+    //2. 否则输出该书无库存，且输出最近归还的时间。
+    if(foundBook)
+    {
+        sqlstr = "select stock from book where bookid = '"+BOOKID+"';" ;
+        if(query.exec(sqlstr))
+        {
+            if(query.first())
+            {
+                qDebug()<<sqlstr ;
+                int Stock = query.value(0).toInt() ; //这本书的库存
+                if(Stock >= 1)//还有库存，还能借书
+                {
+                    //借书操作：
+                    /*
+                        1.book表库存 -- ;
+                        2.borrow表加数据 ;
+                    */
+                    Stock -- ;
+                    //book表stock --;
+                    QString newStock = QString::number(Stock) ;
+                    if(query.exec("update book set stock = "+newStock+" where bookid = '" + BOOKID + "';"))
+                    {
+                        qDebug()<<"Table book stock --" ;
+                    }
+                    //borrow表加数据
+                    sqlstr = "insert into borrow (bookid,cardid,borrowtime,returntime,managerid) values ('"+BOOKID+"','"+CARDID+"',curdate(),'0-0-0','"+ManagerAccount+"' );" ;
+                    if(query.exec(sqlstr))
+                    {
+                        qDebug()<<" Table borrow insert finish!" ;
+                    }
+                }
+                else//无库存，无法借书
+                {
+                    //输出该书无库存，且输出最近归还的时间
+                    QString lastReturnTime ;
+                    //根据bookid从borrow表中找出最近归还时间
+                    sqlstr = "select " ;
+                    if(query.exec())
+
+                    QMessageBox::warning(this,"Warn","The stock of the book is 0!\n Last return-time is "+lastReturnTime) ;
+                }
+            }
+        }
+    }
+}
+
+
+void manager::on_QueryCardID_clicked() //点击查询，根据借书卡号来显示已经借书的记录
+{
+    //需要用到TableView
+    QSqlQueryModel *model = new QSqlQueryModel;
+    QString sqlstr = "select bookid,name,category,press,year,author,price,collection,stock from borrow natural join book where cardid = ";
+    QString tmp = ui->LineCardID->text() ;
+    CARDID = tmp ;
+    sqlstr += tmp ;
+
+    model->setQuery(sqlstr);
+    qDebug()<<sqlstr ;
+    model->setHeaderData(0, Qt::Horizontal, tr("id"));
+    model->setHeaderData(1, Qt::Horizontal, tr("category"));
+    model->setHeaderData(2, Qt::Horizontal, tr("name"));
+    model->setHeaderData(3, Qt::Horizontal, tr("press"));
+    model->setHeaderData(4, Qt::Horizontal, tr("year"));
+    model->setHeaderData(5, Qt::Horizontal, tr("author"));
+    model->setHeaderData(6, Qt::Horizontal, tr("price"));
+    model->setHeaderData(7, Qt::Horizontal, tr("collection"));
+    model->setHeaderData(8, Qt::Horizontal, tr("stock"));
+
+    ui->Borrow->setModel(model);
+    ui->Borrow->setEditTriggers(QAbstractItemView::NoEditTriggers); //设置成不可编辑
 }
 

@@ -3,6 +3,7 @@
 #include <QDebug>
 
 extern QSqlDatabase db ;
+QString ManagerAccount ; //当前进行操作的管理员账号，后续需要插入borrow表中
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +17,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 
 void MainWindow::on_Login_in_clicked()
 {
@@ -39,8 +41,9 @@ void MainWindow::on_Login_in_clicked()
             {
                 QMessageBox::warning(this,tr("Login Fail!"),tr("Password Wrong!")) ;
             }
-            else
+            else //登陆成功
             {
+                ManagerAccount = account ;
                 admin->show() ;
             }
         }

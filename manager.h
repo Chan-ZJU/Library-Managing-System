@@ -11,6 +11,8 @@
 #include <QMessageBox>
 #include <QFile>
 
+extern QString ManagerAccount ;
+
 namespace Ui {
 class manager;
 }
@@ -31,6 +33,10 @@ private slots:
     void on_comboBox_currentIndexChanged(const QString &arg1);
 
     void on_AddBookFromFile_clicked();
+
+    void on_BorrowBook_clicked();
+
+    void on_QueryCardID_clicked();
 
 private:
     Ui::manager *ui;
