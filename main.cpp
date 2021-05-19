@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
         db.setPassword("cz3190102358");
         bool ok = db.open();
         if (ok){
-            qDebug()<<"MySql connect!!"<<endl ;
+            qDebug()<<"MySql connect!!" ;
         }
         else {
             qDebug()<<"wrong" ;

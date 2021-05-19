@@ -1,0 +1,6 @@
+(zju102', 'cs', 'c语言', 'ZJU Press', 2019, 'Hello', 34.5, 22)
+('zju103', 'cs', 'c++语言', 'ZJU Press', 2019, 'Hello', 34.5, 20)
+('zju104', 'cs', 'c#语言', 'ZJU Press', 2019, 'Hello', 34.5, 10)
+('zju105', 'cs', 'css语言', 'ZJU Press', 2019, 'Hello', 34.5, 15)
+('zju106', 'cs', 'js语言', 'ZJU Press', 2019, 'Hello', 34.5, 21)
+('zju107', 'cs', 'html语言', 'ZJU Press', 2019, 'Hello', 34.5, 20)

@@ -20,14 +20,14 @@ MainWindow::~MainWindow()
 void MainWindow::on_Login_in_clicked()
 {
     QString account = ui->Account->text() ;
-    qDebug()<<account<<endl ;
+    qDebug()<<account ;
     QString password = ui->Password->text() ;
     //查看管理员表中是否有account
     QSqlQuery query(db) ;
-    if(db.open()) qDebug()<<"DB conn"<<endl ;
+    if(db.open()) qDebug()<<"DB conn" ;
     QString sqlstr ;
     sqlstr = "select password from manager where ID = '"+account+"';" ;
-    qDebug()<<sqlstr<<endl ;
+    qDebug()<<sqlstr ;
     //query.prepare(sqlstr) ;
     if(query.exec(sqlstr))
     {

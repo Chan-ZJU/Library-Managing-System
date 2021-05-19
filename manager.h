@@ -5,7 +5,11 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <string>
+#include <QString>
 #include <QtDebug>
+#include <QStringAlgorithms>
+#include <QMessageBox>
+#include <QFile>
 
 namespace Ui {
 class manager;
@@ -23,6 +27,10 @@ private slots:
     void on_BookQuery_clicked();
 
     void on_addOneBook_clicked();
+
+    void on_comboBox_currentIndexChanged(const QString &arg1);
+
+    void on_AddBookFromFile_clicked();
 
 private:
     Ui::manager *ui;
