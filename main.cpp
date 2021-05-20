@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         db.setPort(3306);
         db.setDatabaseName("library");
         db.setUserName("root");
-        db.setPassword("cz3190102358");
+        db.setPassword("");
         bool ok = db.open();
         if (ok){
             qDebug()<<"MySql connect!!" ;
