@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include <QMessageBox>
 #include "manager.h"
+#include "visitor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,8 +23,11 @@ private slots:
 
     void on_Login_in_clicked();
 
+    void on_VisitorLogin_clicked();
+
 private:
     Ui::MainWindow *ui;
     manager *admin ;
+    visitor *Visitor ;
 };
 #endif // MAINWINDOW_H

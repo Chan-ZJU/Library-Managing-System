@@ -38,6 +38,12 @@ private slots:
 
     void on_QueryCardID_clicked();
 
+    void on_ReturnBook_clicked();
+
+    void on_AddCard_clicked();
+
+    void on_DeleteCard_clicked();
+
 private:
     Ui::manager *ui;
 };

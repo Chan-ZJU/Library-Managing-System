@@ -319,16 +319,26 @@ void manager::on_BorrowBook_clicked() //点击借书按钮
                     {
                         qDebug()<<" Table borrow insert finish!" ;
                     }
+                    QMessageBox::information(this,tr("Info"),tr("Borrow Book Finish!")) ;
                 }
                 else//无库存，无法借书
                 {
                     //输出该书无库存，且输出最近归还的时间
                     QString lastReturnTime ;
                     //根据bookid从borrow表中找出最近归还时间
-                    sqlstr = "select " ;
-                    if(query.exec())
-
-                    QMessageBox::warning(this,"Warn","The stock of the book is 0!\n Last return-time is "+lastReturnTime) ;
+                    sqlstr = " select returntime from borrow where bookid = '"+BOOKID+"' order by returntime desc ;" ;
+                    if(query.exec(sqlstr))
+                    {
+                        if(query.first())
+                        {
+                            lastReturnTime = query.value(0).toString();
+                            qDebug()<<lastReturnTime ;
+                        }
+                    }//return 0000-00-00表示还未还书,但实际调试发现返回了空值，而非0000-00-00
+                    if(lastReturnTime!="")
+                        QMessageBox::warning(this,"Warn","The stock of the book is 0!\n Last return-time is "+lastReturnTime) ;
+                    else
+                        QMessageBox::warning(this,"Warn","The stock of the book is 0!\n No book has been returned") ;
                 }
             }
         }
@@ -336,14 +346,29 @@ void manager::on_BorrowBook_clicked() //点击借书按钮
 }
 
 
-void manager::on_QueryCardID_clicked() //点击查询，根据借书卡号来显示已经借书的记录
+void manager::on_QueryCardID_clicked() //点击查询，根据借书卡号来显示已经借书的记录(已还了就不显示)
 {
     //需要用到TableView
     QSqlQueryModel *model = new QSqlQueryModel;
-    QString sqlstr = "select bookid,name,category,press,year,author,price,collection,stock from borrow natural join book where cardid = ";
+    QString sqlstr = "select bookid,name,category,press,year,author,price,collection,stock from borrow natural join book where cardid = '";
+    QSqlQuery query(db) ;
     QString tmp = ui->LineCardID->text() ;
     CARDID = tmp ;
     sqlstr += tmp ;
+    sqlstr += "' and returntime = '0000-00-00' ;" ;
+    QString sqlstr1 = "select * from card where cardid = '"+CARDID+"' ;" ;
+    //如果借书卡号不存在，提示不存在
+    if(query.exec(sqlstr1))
+    {
+        if(!query.first())
+        {
+            QMessageBox::warning(this,tr("Warn"),tr("No such Card!")) ;
+        }
+        else
+        {
+            QMessageBox::information((this),tr("Info"),tr("Query Finish!")) ;
+        }
+    }
 
     model->setQuery(sqlstr);
     qDebug()<<sqlstr ;
@@ -359,5 +384,128 @@ void manager::on_QueryCardID_clicked() //点击查询，根据借书卡号来显
 
     ui->Borrow->setModel(model);
     ui->Borrow->setEditTriggers(QAbstractItemView::NoEditTriggers); //设置成不可编辑
+}
+
+
+void manager::on_ReturnBook_clicked() //点击还书按钮
+{
+    /*
+        如果该书在已借书籍列表内, 则还书成功, 同时库存加一.
+        否则输出出错信息.
+    */
+    QString BOOKID = ui->LineBookID->text() ;
+    QString sqlstr ;
+    QString NewStock ;
+    //还未还的书returntime是0000-00-00
+    sqlstr = "select * from borrow where bookid = '"+BOOKID+"' and returntime = '0000-00-00' ;" ;
+    QSqlQuery query(db) ;
+    if(query.exec(sqlstr))
+    {
+        if(query.first())
+        {
+            //借过这本书，并且没有还过，开始还书
+            //1. stock ++ ;
+            //2. borrow表中更新returntime为当前日期curdate() ;
+            sqlstr = "select stock from book where bookid = '"+BOOKID+"';" ;
+            if(query.exec(sqlstr))
+            {
+                if(query.first())
+                {
+                    NewStock = query.value(0).toString() ;
+                    int tmp = NewStock.toInt() ;
+                    NewStock = QString::number(tmp+1) ;
+                    sqlstr = "update book set stock = "+NewStock+" where bookid = '"+BOOKID+"' ;" ;
+                    if(query.exec(sqlstr))//update stock
+                    {
+                        qDebug()<<"book returned and update stock" ;
+                    }
+                }
+            }
+            sqlstr = "update borrow set returntime = curdate() where bookid = '"+BOOKID+"'and returntime='0000-00-00' lIMIT 1 ;" ;
+            if(query.exec(sqlstr))
+            {
+                QMessageBox::information(this,tr("Info"),tr("Return Book finish!")) ;
+            }
+        }
+        else //没有借过这本书，或者已经还了，输出出错信息
+        {
+            QMessageBox::information(this,tr("Info"),tr("The book has been returned!")) ;
+        }
+    }
+}
+
+
+void manager::on_AddCard_clicked() //点击增加借书证按钮
+{
+    //先判断借书证存不存在，已存在就提示以下
+    //不存在就增加
+    QString CARDID = ui->LineCardID->text() ;
+    QString sqlstr ;
+    QString NAME, UNIT, TYPE ;
+    QSqlQuery query(db) ;
+    sqlstr = "select * from card where cardid = '"+CARDID+"' ;" ;
+    if(query.exec(sqlstr))
+    {
+        if(query.first())//已经存在
+        {
+            QMessageBox::information(this,tr("Info"),tr("Card Exists!")) ;
+        }
+        else
+        {
+            //不存在，添加借书证
+            NAME = ui->LineName->text() ;
+            UNIT = ui->LineUnit->text();
+            TYPE = ui->LineType->text() ;
+            sqlstr = "insert into card values ('" + CARDID+"'," + " '"+NAME+"', '"+UNIT+"', '"+TYPE+"' ) ;" ;
+            if(query.exec(sqlstr))
+            {
+                qDebug()<<sqlstr ;
+                QMessageBox::information(this,tr("Info"),tr("Add Card Finish!")) ;
+            }
+        }
+    }
+}
+
+
+void manager::on_DeleteCard_clicked() //点击删除借书证按钮
+{
+    //起初建表时设置card表cardid为PK，borrow表cardid为指向card.cardid的FK，且on delete cascade，理论上讲应该只要删card表，borrow记录就没了
+    //实际验证确实如此
+    //先查找有没有这个cardid
+    QString CARDID = ui->LineCardID->text() ;
+    QString sqlstr ;
+    QSqlQuery query(db) ;
+    sqlstr = "select * from card where cardid = '"+CARDID+"' ;" ;
+    if(query.exec(sqlstr))
+    {
+        qDebug()<<sqlstr ;
+        if(!query.first())//不存在，提示错误
+        {
+            QMessageBox::warning(this,tr("Warn"),tr("No such CARD!")) ;
+        }
+        else//存在这个借书证，要删除
+            //只需要删除card表中记录就可，borrow设置外键，级联删除，无需操作
+            //要判断borrow中是否还有没有还的书，否则无法注销
+        {
+            sqlstr = "select * from borrow where cardid = '"+CARDID+"' and returntime = '0000-00-00' ;" ;
+            if(query.exec(sqlstr))
+            {
+                if(!query.first())//没有未还的书，直接删除card
+                {
+                    sqlstr = "delete from card where cardid = '"+CARDID+"' ;" ;
+                    qDebug()<<sqlstr ;
+                    if(query.exec(sqlstr))
+                    {
+                        qDebug()<<sqlstr ;
+                        QMessageBox::information(this,tr("Info"),tr("Delete Card Finish!")) ;
+                    }
+                }
+                else
+                {
+                    QMessageBox::warning(this,tr("Warn"),tr("Delete Fail! Book hasn't been returned!")) ;
+                }
+            }
+        }
+    }
 }
 

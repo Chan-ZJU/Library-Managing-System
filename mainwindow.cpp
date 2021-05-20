@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "visitor.h"
 #include <QDebug>
 
 extern QSqlDatabase db ;
@@ -11,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     admin = new manager ;
     ui->setupUi(this);
+    Visitor = new visitor ;
 }
 
 MainWindow::~MainWindow()
@@ -57,5 +59,11 @@ void MainWindow::on_Login_in_clicked()
     {
         qDebug()<<"Query not execute!" ;
     }
+}
+
+
+void MainWindow::on_VisitorLogin_clicked()
+{
+    Visitor->show() ;
 }
 

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>visitor</class>
+ <widget class="QMainWindow" name="visitor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1233</width>
+    <height>442</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTableView" name="tableView">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>40</y>
+      <width>941</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>160</y>
+      <width>231</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="2" column="0">
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>BOOKID</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CATEGORY</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>NAME</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PRESS</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>YEAR</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>AUTHOR</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PRICE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COLLECTION</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>STOCK</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLineEdit" name="QueryOrder2"/>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLineEdit" name="QueryOrder1"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>排列顺序</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" colspan="2">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>查询条件</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="BookQuery">
+       <property name="text">
+        <string>查询图书</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1233</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

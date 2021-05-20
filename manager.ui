@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1237</width>
-    <height>672</height>
+    <height>738</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>980</x>
@@ -258,7 +258,7 @@
       <x>0</x>
       <y>410</y>
       <width>941</width>
-      <height>191</height>
+      <height>281</height>
      </rect>
     </property>
    </widget>
@@ -266,14 +266,14 @@
     <property name="geometry">
      <rect>
       <x>980</x>
-      <y>430</y>
-      <width>231</width>
-      <height>143</height>
+      <y>410</y>
+      <width>241</width>
+      <height>141</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_7">
+    <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QLabel" name="label_12">
          <property name="text">
@@ -287,14 +287,25 @@
       </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="QueryCardID">
-       <property name="text">
-        <string>查询</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="QueryCardID">
+         <property name="text">
+          <string>查询</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="DeleteCard">
+         <property name="text">
+          <string>删除</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
         <widget class="QLabel" name="label_13">
          <property name="text">
@@ -308,26 +319,79 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
+      <widget class="QPushButton" name="BorrowBook">
+       <property name="text">
+        <string>借书</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="ReturnBook">
+       <property name="text">
+        <string>还书</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>1010</x>
+      <y>570</y>
+      <width>171</width>
+      <height>107</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_8">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QPushButton" name="BorrowBook">
-         <property name="text">
-          <string>借书</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
+        <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
-          <widget class="QPushButton" name="ReturnBook">
+          <widget class="QLabel" name="label_15">
            <property name="text">
-            <string>还书</string>
+            <string>姓名</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>单位</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>类别</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <widget class="QLineEdit" name="LineName"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="LineUnit"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="LineType"/>
+         </item>
+        </layout>
+       </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="AddCard">
+       <property name="text">
+        <string>增加</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
